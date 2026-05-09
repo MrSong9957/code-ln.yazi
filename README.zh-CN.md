@@ -130,6 +130,10 @@ winget install sharkdp.bat
 
 按 `q` 退出 Yazi，重新打开。导航到任意文本文件，即可在预览面板中看到行号。
 
+## 作者
+
+Mr.Song (274504958@qq.com)
+
 ## License
 
 MIT

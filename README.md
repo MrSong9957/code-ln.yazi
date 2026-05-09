@@ -130,6 +130,10 @@ winget install sharkdp.bat
 
 Press `q` to quit Yazi, then reopen it. Navigate to a text file to see line numbers in the preview pane.
 
+## Author
+
+Mr.Song (274504958@qq.com)
+
 ## License
 
 MIT
