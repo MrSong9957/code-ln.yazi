@@ -2,12 +2,12 @@ English | [中文](README.zh-CN.md)
 
 # code-ln.yazi
 
-Two previewer plugins for [Yazi](https://yazi-rs.github.io/) that add line numbers to the file preview pane.
+A [Yazi](https://yazi-rs.github.io/) previewer plugin that adds line numbers to the file preview pane.
 
 ## Preview
 
 ```
- bat version                          fast version
+ Default mode (bat)                  Fast mode (--fast)
 ┌─────────────────────────────────┐  ┌─────────────────────────────────┐
 │   1 │ local M = {}               │  │   1 local M = {}                │
 │   2 │ local cache = {}           │  │   2 local cache = {}            │
@@ -29,89 +29,46 @@ Two previewer plugins for [Yazi](https://yazi-rs.github.io/) that add line numbe
 └─────────────────────────────────┘  └─────────────────────────────────┘
 ```
 
-| | bat | fast |
+| | Default (bat) | Fast (`--fast`) |
 |---|---|---|
 | Syntax highlighting | Yes | No |
 | Latency | Slight (ANSI parsing) | Near-zero (pure Lua) |
-| External dependency | [bat](https://github.com/sharkdp/bat) | None |
-| Install command | `ya pkg add MrSong9957/code-ln:bat` | `ya pkg add MrSong9957/code-ln:fast` |
+| External dependency | [bat](https://github.com/sharkdp/bat) (optional) | None |
 
-## AI-Assisted Installation
-
-Tell your AI assistant (Claude Code, Codex, Cursor, Cline, etc.):
-
-> Install the **bat** version of code-ln.yazi from https://github.com/MrSong9957/code-ln.yazi
-
-Or for the fast version:
-
-> Install the **fast** version of code-ln.yazi from https://github.com/MrSong9957/code-ln.yazi
-
-The AI should perform these steps:
-
-**1. Install the plugin package:**
+## Installation
 
 ```sh
-# bat version (with syntax highlighting)
-ya pkg add MrSong9957/code-ln:bat
-
-# fast version (no highlighting, zero latency)
-ya pkg add MrSong9957/code-ln:fast
+ya pkg add MrSong9957/code-ln
 ```
 
-**2. Locate the Yazi config file:**
+## Usage
+
+Add to your `yazi.toml`:
 
 | Platform | Path |
 |----------|------|
 | Linux / macOS | `~/.config/yazi/yazi.toml` |
 | Windows | `%AppData%\yazi\config\yazi.toml` |
 
-Create the file if it does not exist.
-
-**3. Add the previewer configuration:**
-
-For the **bat** version:
+**Default mode** — syntax highlighting via `bat`:
 
 ```toml
 [[plugin.prepend_previewers]]
 mime = "text/*"
-run = "bat"
+run = "code-ln"
 ```
 
-For the **fast** version:
+**Fast mode** — plain text with line numbers, near-zero latency:
 
 ```toml
 [[plugin.prepend_previewers]]
 mime = "text/*"
-run = "fast"
+run = "code-ln --fast"
 ```
 
-**4. Dependencies (bat version only):**
+## Dependencies
 
-Ensure [bat](https://github.com/sharkdp/bat) is installed and available in `PATH`. Installation: https://github.com/sharkdp/bat#installation
-
-## Manual Installation
-
-### 1. Install the plugin
-
-```sh
-# bat version
-ya pkg add MrSong9957/code-ln:bat
-
-# fast version
-ya pkg add MrSong9957/code-ln:fast
-```
-
-### 2. Edit yazi.toml
-
-Add the following to your yazi config (see paths above):
-
-```toml
-[[plugin.prepend_previewers]]
-mime = "text/*"
-run = "bat"   # or "fast"
-```
-
-### 3. Install bat (bat version only)
+[bat](https://github.com/sharkdp/bat) is optional. If not installed, the plugin automatically falls back to plain text with line numbers.
 
 ```sh
 # macOS
@@ -125,10 +82,6 @@ winget install sharkdp.bat
 
 # Other: https://github.com/sharkdp/bat#installation
 ```
-
-### 4. Restart Yazi
-
-Press `q` to quit Yazi, then reopen it. Navigate to a text file to see line numbers in the preview pane.
 
 ## Author
 

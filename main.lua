@@ -8,53 +8,59 @@ function M:peek(job)
 
 	local url = tostring(job.file.url)
 	local h = area.h
+	local fast = job.args and job.args[1] == "--fast"
 
 	if cache.url ~= url then
-		cache = { url = url, lines = {} }
-		local path = tostring(job.file.path)
-		local output, err = Command("bat"):arg({
-			"--style=numbers",
-			"--color=always",
-			"--paging=never",
-			"--wrap=never",
-			"--",
-			path,
-		}):output()
+		cache = { url = url, lines = {}, ansi = false }
 
-		if output and output.stdout ~= "" then
-			for line in output.stdout:gmatch("[^\r\n]+") do
+		if not fast then
+			local path = tostring(job.file.path)
+			local output = Command("bat"):arg({
+				"--style=numbers",
+				"--color=always",
+				"--paging=never",
+				"--wrap=never",
+				"--",
+				path,
+			}):output()
+
+			if output and output.stdout ~= "" then
+				cache.ansi = true
+				for line in output.stdout:gmatch("[^\r\n]+") do
+					cache.lines[#cache.lines + 1] = line
+				end
+			end
+		end
+
+		if not cache.ansi then
+			local f = io.open(tostring(job.file.path), "r")
+			if not f then return end
+			for line in f:lines() do
 				cache.lines[#cache.lines + 1] = line
 			end
+			f:close()
 		end
 	end
 
-	if #cache.lines > 0 then
-		local end_i = math.min(skip + h, #cache.lines)
+	if #cache.lines == 0 then return end
+
+	local end_i = math.min(skip + h, #cache.lines)
+
+	if cache.ansi then
 		if skip < #cache.lines then
 			local visible_raw = table.concat(cache.lines, "\n", skip + 1, end_i)
 			ya.preview_widget(job, ui.Text.parse(visible_raw):area(area))
-			return
 		end
-	end
-
-	-- Fallback: plain text with manual line numbers
-	local path = tostring(job.file.path)
-	local f = io.open(path, "r")
-	if not f then return end
-	local visible = {}
-	local i = 0
-	for line in f:lines() do
-		i = i + 1
-		if i > skip then
+	else
+		local visible = {}
+		for i = skip + 1, end_i do
 			visible[#visible + 1] = ui.Line {
 				ui.Span(string.format("%4d ", i)):fg("darkgray"),
-				ui.Span(line),
+				ui.Span(cache.lines[i]),
 			}
-			if #visible >= h then break end
 		end
+		ya.preview_widget(job, ui.Text(visible):area(area))
 	end
-	f:close()
-	ya.preview_widget(job, ui.Text(visible):area(area))
 end
 
 function M:seek(job)

@@ -2,12 +2,12 @@
 
 # code-ln.yazi
 
-两个 [Yazi](https://yazi-rs.github.io/) 预览插件，为文件预览面板添加行号显示。
+[Yazi](https://yazi-rs.github.io/) 预览插件，为文件预览面板添加行号显示。
 
 ## 效果预览
 
 ```
- bat 版本                              fast 版本
+ 默认模式（bat）                    快速模式（--fast）
 ┌─────────────────────────────────┐  ┌─────────────────────────────────┐
 │   1 │ local M = {}               │  │   1 local M = {}                │
 │   2 │ local cache = {}           │  │   2 local cache = {}            │
@@ -29,89 +29,46 @@
 └─────────────────────────────────┘  └─────────────────────────────────┘
 ```
 
-| | bat | fast |
+| | 默认（bat） | 快速（`--fast`） |
 |---|---|---|
 | 语法高亮 | 有 | 无 |
 | 延迟 | 轻微（ANSI 解析） | 几乎为零（纯 Lua） |
-| 外部依赖 | [bat](https://github.com/sharkdp/bat) | 无 |
-| 安装命令 | `ya pkg add MrSong9957/code-ln:bat` | `ya pkg add MrSong9957/code-ln:fast` |
+| 外部依赖 | [bat](https://github.com/sharkdp/bat)（可选） | 无 |
 
-## AI 辅助安装
-
-向你的 AI 助手（Claude Code、Codex、Cursor、Cline 等）发送：
-
-> 从 https://github.com/MrSong9957/code-ln.yazi 安装 **bat** 版本
-
-或 fast 版本：
-
-> 从 https://github.com/MrSong9957/code-ln.yazi 安装 **fast** 版本
-
-AI 会自动执行以下步骤：
-
-**1. 安装插件包：**
+## 安装
 
 ```sh
-# bat 版本（带语法高亮）
-ya pkg add MrSong9957/code-ln:bat
-
-# fast 版本（无高亮，零延迟）
-ya pkg add MrSong9957/code-ln:fast
+ya pkg add MrSong9957/code-ln
 ```
 
-**2. 定位 Yazi 配置文件：**
+## 使用
+
+在 `yazi.toml` 中添加配置：
 
 | 平台 | 路径 |
 |------|------|
 | Linux / macOS | `~/.config/yazi/yazi.toml` |
 | Windows | `%AppData%\yazi\config\yazi.toml` |
 
-如果文件不存在则创建。
-
-**3. 添加预览器配置：**
-
-**bat** 版本：
+**默认模式** — 通过 `bat` 提供语法高亮：
 
 ```toml
 [[plugin.prepend_previewers]]
 mime = "text/*"
-run = "bat"
+run = "code-ln"
 ```
 
-**fast** 版本：
+**快速模式** — 纯文本 + 行号，几乎零延迟：
 
 ```toml
 [[plugin.prepend_previewers]]
 mime = "text/*"
-run = "fast"
+run = "code-ln --fast"
 ```
 
-**4. 依赖（仅 bat 版本）：**
+## 依赖
 
-确保 [bat](https://github.com/sharkdp/bat) 已安装并在 `PATH` 中。安装方式：https://github.com/sharkdp/bat#installation
-
-## 手动安装
-
-### 1. 安装插件
-
-```sh
-# bat 版本
-ya pkg add MrSong9957/code-ln:bat
-
-# fast 版本
-ya pkg add MrSong9957/code-ln:fast
-```
-
-### 2. 编辑 yazi.toml
-
-在 Yazi 配置文件中（路径见上方）添加：
-
-```toml
-[[plugin.prepend_previewers]]
-mime = "text/*"
-run = "bat"   # 或 "fast"
-```
-
-### 3. 安装 bat（仅 bat 版本）
+[bat](https://github.com/sharkdp/bat) 为可选依赖。未安装时插件自动降级为纯文本 + 行号。
 
 ```sh
 # macOS
@@ -125,10 +82,6 @@ winget install sharkdp.bat
 
 # 其他平台：https://github.com/sharkdp/bat#installation
 ```
-
-### 4. 重启 Yazi
-
-按 `q` 退出 Yazi，重新打开。导航到任意文本文件，即可在预览面板中看到行号。
 
 ## 作者
 
