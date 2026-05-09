@@ -1,34 +1,36 @@
 # code-ln.yazi
 
-Preview text files with syntax highlighting and line numbers using [bat](https://github.com/sharkdp/bat).
+Two previewer plugins for text files with line numbers.
 
-## Installation
+## bat (syntax highlighted)
+
+Uses [bat](https://github.com/sharkdp/bat) for syntax highlighting with line numbers.
 
 ```sh
-ya pkg add MrSong9957/code-ln
+ya pkg add MrSong9957/code-ln:bat
 ```
 
-Make sure [bat](https://github.com/sharkdp/bat) is installed and available in your `PATH`.
-
-## Usage
-
-Add this to your `~/.config/yazi/yazi.toml`:
+Requires [bat](https://github.com/sharkdp/bat) installed.
 
 ```toml
 [[plugin.prepend_previewers]]
 mime = "text/*"
-run = "code-ln"
+run = "bat"
 ```
 
-On Windows, the config file is at `%AppData%\yazi\config\yazi.toml`.
+## fast (no highlighting)
 
-## Features
+Pure Lua implementation — no external dependencies, near-zero latency.
 
-- Syntax highlighting powered by `bat`
-- Line numbers displayed in the preview pane
-- Scrollable with mouse wheel
-- Fallback to plain text when `bat` is unavailable
-- Single-file cache to avoid redundant `bat` invocations
+```sh
+ya pkg add MrSong9957/code-ln:fast
+```
+
+```toml
+[[plugin.prepend_previewers]]
+mime = "text/*"
+run = "fast"
+```
 
 ## License
 
